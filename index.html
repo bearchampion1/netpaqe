@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8"/>
+        <link rel="stylesheet" href="style.css"/>
+        <title>熊哥</title>
+    </head>
+    <body>
+        <header>
+        <h1 id="title">熊哥的網站</h1>
+        </header>
+        <nav>
+            <ul>
+                <li class="block" ><a href="#detail-1" >熊哥簡介</a></li>  
+                <li class="block"><a href="#" >學歷</a></li> 
+                <li class="block"><a href="media-link.html">社群連結</a></li>
+            </ul>
+        </nav>
+        <dl>
+            <dt id="detail-1">熊哥小簡介:</dt>
+            <br>
+            <dd>
+                目前是一個大學生，就讀台灣科技大學 資訊管理系，並且經營兩個頻道及threads社群
+                <br>
+                興趣:剪輯、看動畫、動漫、小說、唱歌、瘋狂買周邊、coding
+                <br>
+                個性(本人見解):熱心助人、剛硬、悲觀主義、一點點完美主義、直接
+                <br>
+                喜歡吃:壽喜燒、火鍋
+            </dd>
+        </dl>
+        <footer>
+            <p>&copy; 熊哥</p>
+            <address>email:dppss0118@gmail.com</address>
+            <p id="time"></p>
+            <script>
+            function updateTime() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            document.getElementById("time").textContent = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+        }
+        setInterval(updateTime, 1000);
+        updateTime();
+        </script>
+        </footer>
+    </body>
+</html>
