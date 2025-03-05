@@ -3,18 +3,22 @@
     <head>
         <meta charset="UTF-8"/>
         <link rel="stylesheet" href="style.css"/>
+        <link rel="stylesheet" href="nav.css"/>
         <title>熊哥</title>
     </head>
     <body>
         <header>
         <h1 id="title">熊哥的網站</h1>
         </header>
-        <nav>
-            <ul>
-                <li class="block" ><a href="#detail-1" >熊哥簡介</a></li>  
-                <li class="block"><a href="#" >學歷</a></li> 
-                <li class="block"><a href="media-link.html">社群連結</a></li>
-            </ul>
+        <nav class="dropdown">
+            <div class="dropdown-content">
+                <ul>
+                    <li class="block" ><a href="#detail-1" >熊哥簡介</a></li>  
+                    <li class="block"><a href="#" >學歷</a></li> 
+                    <li class="block"><a href="media-link.html">社群連結</a></li>
+                    <li class="block"><a href="#"><b>看過的動漫</b></a></li>
+                </ul>
+            </div>
         </nav>
         <dl>
             <dt id="detail-1">熊哥小簡介:</dt>
@@ -28,25 +32,29 @@
                 <br>
                 喜歡吃:壽喜燒、火鍋
             </dd>
+            <br/>
+            <dt id="detail-2">熊哥學歷:</dt>
+            <br>
+            <dd>
+                台灣科技大學 資訊管理系 一年級<br/>
+                新竹市立香山高級中學 資料處理科<br/>
+                新竹市立培英國中
+            </dd>
+            <br/>
+            <dt id="detail-3">現有技能:</dt>
+            <br>
+            <dd>
+                程式設計:golang<br/>
+                剪輯製作 社群經營
+            </dd>
         </dl>
         <footer>
             <p>&copy; 熊哥</p>
             <address>email:dppss0118@gmail.com</address>
+            <!--當前時間跑動-->
             <p id="time"></p>
-            <script>
-            function updateTime() {
-            const now = new Date();
-            const year = now.getFullYear();
-            const month = String(now.getMonth() + 1).padStart(2, '0');
-            const day = String(now.getDate()).padStart(2, '0');
-            const hours = String(now.getHours()).padStart(2, '0');
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            const seconds = String(now.getSeconds()).padStart(2, '0');
-            document.getElementById("time").textContent = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-        }
-        setInterval(updateTime, 1000);
-        updateTime();
-        </script>
+            <script src="seed.js"></script>
+            
         </footer>
     </body>
 </html>
