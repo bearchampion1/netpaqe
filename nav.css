@@ -4,6 +4,7 @@ body {
 }
 .block{
     color: black;
+    list-style-type: ' ';
 }
 .dropdown {
     position: relative;
@@ -19,7 +20,6 @@ body {
     position: flex;
     flex-flow: row;
     min-width: 1000px;
-    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
     z-index: 1;
 }
 .dropdown-content a {
