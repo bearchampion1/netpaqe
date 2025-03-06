@@ -1,10 +1,11 @@
 body {
     font-family: Arial, sans-serif;
+    background-color: blanchedalmond;
     
 }
 .block{
     color: black;
-    list-style-type: ' ';
+    list-style-type: '➡️';
 }
 .dropdown {
     position: relative;
