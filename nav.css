@@ -1,27 +1,17 @@
+bootstrap.css
+bootstrap.rtl.css
+bootstrap.min.css
+bootstrap.rtl.min.css
 body {
     font-family: Arial, sans-serif;
     background-color: blanchedalmond;
     
 }
 .block{
-    color: black;
-    list-style-type: '➡️';
-}
-.dropdown {
-    position: relative;
-    display: inline;
-    
+    background-color: rgb(12, 225, 108); 
 }
 .dropdown-content {
     background-color: rgb(5, 202, 232);
-    background-size: cover;
-    background-position: center;
-    background-repeat: repeat;
-    flex-direction: row-reverse;
-    position: flex;
-    flex-flow: row;
-    min-width: 1000px;
-    z-index: 1;
 }
 .dropdown-content a {
     color: rgb(0, 0, 0);
