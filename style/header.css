@@ -1,53 +1,98 @@
-.page_header{
-    display: flex;
-    flex-direction: row;
-    height: 100px;
-    padding: 0px 32px;
-    justify-content: space-between;
-    position:fixed;
-    background-color: rgb(17, 17, 255);
-    top:0px;
-    right:0px;
-    left:0px;
-    z-index: 1000;
-}
-.header_left{
-    width: 145px;
-    margin-right: 125px;
+.page_header {
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-between;
-    flex-shrink: 0;
-    background-color: rgb(177, 13, 13);
+    height: 100px;
+    padding: 0 16px;
+    justify-content: center;
+    position: fixed;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    background-color: rgb(17, 17, 255);
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 1000;
 }
+
+.header_left,
+.header_right{
+    display: none; /* 不再保留側邊空間，改以 header_center 自動寬度置中 */
+}
+
 
 .header_center{
     display: flex;
-    flex-direction: row;
+    flex-direction: row; /* 桌面：圖片在左、標題在右（平行） */
     align-items: center;
-    flex: 1;
-    max-width: 650px;
+    justify-content: center; /* 整組置中 */
+    gap: 12px;
+    flex: 0 0 auto; /* 取消 1fr 空間，讓區塊寬度自適應內容 */
+    width: auto;
+    max-width: none;
+    padding: 0 12px;
     background-color: rgb(164, 3, 205);
+}
 
-}
-.header_right{
-    display: flex;
-    margin-left: 100px;
-    flex-direction: row;
-    align-items: center;
-    width: 160px;
-    justify-content: space-between;
-    flex-shrink: 0;
-    background-color: rgb(91, 255, 20);
-}
 .logo{
-    width: 100px;
-    height: 100px;  
+    width: 88px;
+    height: 88px;
+    transform-origin: center;
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    border-radius: 12px;
+    object-fit: cover;
 }
+
 .header_center p{
-    font-size: 50px;
+    font-size: 34px;
     color: rgb(0, 0, 0);
-    font-weight: bold;
-    margin-left: 15%;
+    font-weight: 800;
+    margin: 0;
+    text-align: center;
+    opacity: 1;
+    line-height: 1;
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+/* 手機下保持 logo 與標題平行，但整組置中（標題仍居中不變） */
+@media (max-width: 840px){
+    .page_header{
+        justify-content: center; /* header 置中 */
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+    .header_center{
+        flex-direction: row; /* 保持平行 */
+        gap: 10px;
+        align-items: center;
+        justify-content: center; /* 整組置中 */
+        flex-wrap: wrap;
+        width: auto;
+        max-width: none;
+    }
+    .logo{ width: 72px; height: 72px; }
+    .header_center p{ font-size: 20px; text-align: center; }
+}
+
+/* entrance animation for title and logo */
+body.is-loaded .logo{
+    animation: logo-pop 2000ms cubic-bezier(.2,.9,.3,1) forwards;
+}
+
+body.is-loaded .header_center p{
+    animation: title-pop 2000ms cubic-bezier(.2,.9,.3,1) 120ms forwards;
+}
+
+@keyframes logo-pop{
+    from{ opacity: 0; transform: translateY(-12px) scale(0.9) rotate(-10deg); }
+    50%{ transform: translateY(2px) scale(1.06) rotate(6deg); }
+    to{ opacity: 1; transform: translateY(0) scale(1) rotate(0deg); }
+}
+
+@keyframes title-pop{
+    from{ opacity: 0; transform: translateY(-8px) scale(0.98); }
+    to{ opacity: 1; transform: translateY(0) scale(1); }
 }

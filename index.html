@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>熊哥 Website</title>
         <link rel="stylesheet" href="style/header.css">
         <link rel="stylesheet" href="style/index.css">
@@ -9,7 +11,6 @@
     <body>
         <div class="page_header">
             <div class="header_left">
-                
             </div>
             <div class="header_center">
                 <img class="logo" src="image/螢幕擷取畫面 2025-09-26 115129.png" alt="Logo">
@@ -21,23 +22,54 @@
             
 
         </div>
+        <div class="card_board_heading">熊哥的社群傳送門</div>
         <div class="card_board">
-            <button class="card_button">按鈕</button>
-            <button class="card_button">按鈕</button>
+            <a class="card_button" href="https://youtube.com/@bearchampionanime?si=1_06fL471YjVV3fM" target="_blank" rel="noopener">動漫YT頻道</a>
+            <button class="card_button">DC聊天群</button>
             <button class="card_button">按鈕</button>
             <button class="card_button">按鈕</button>
         </div>
+
+        <!-- 本季動畫推薦跑馬燈 (由外部 Excel 來源填充) -->
+        <div class="marquee-heading">本季推薦動畫</div>
+        <div class="marquee" aria-label="本季動畫推薦的跑馬燈" data-src="https://docs.google.com/spreadsheets/d/1DSA4F9A_JOyXvgfW87-uGYrr7isI0sPEM_1H2dHcL70/export?format=xlsx">
+            <div class="marquee__inner">
+                <span class="marquee__item">載入中...</span>
+            </div>
+        </div>
+
+        <section class="profile-card" aria-label="個人敘述卡片">
+            <div class="profile-card__media">
+                <img src="image/螢幕擷取畫面 2025-09-26 115129.png" alt="熊哥的個人照片">
+            </div>
+            <div class="profile-card__body">
+                <span class="profile-card__eyebrow">個人敘述</span>
+                <h2 class="profile-card__title">我是熊哥</h2>
+                <p class="profile-card__text">歡迎來到我的網站，這裡分享本季最值得追的動畫推薦、個人觀影心得，以及最新影音動態。喜歡動畫、遊戲與創意美術，我會把最強主題整理在這裡。</p>
+            </div>
+        </section>
 
         <div class="page_tailed">
             <div class="tailed_left">
                 
             </div>
             <div class="tailed_center">
-                <p>@copyright 2026 熊哥的網站. All rights reserved.</p>
+                <p>&copy 2026 熊哥的網站. All rights reserved.</p>
             </div>
             <div class="tailed_right">
                 
             </div>
         </div>
     </body>
+    <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+    <script src="scripts/marquee.js"></script>
+    <script>
+        // trigger entrance animations after DOM content loaded
+        document.addEventListener('DOMContentLoaded', function(){
+            // small timeout so CSS can apply initial state
+            requestAnimationFrame(function(){
+                document.body.classList.add('is-loaded');
+            });
+        });
+    </script>
 </html>

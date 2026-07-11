@@ -1,35 +1,43 @@
 .page_tailed{
     display: flex;
     flex-direction: row;
-    height: 50px;
-    padding: 0px 32px;
-    justify-content: space-between;
-    position:fixed;
+    align-items: center;
+    height: 60px;
+    padding: 0 16px;
+    justify-content: center;
+    position: absolute;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
     background-color: rgb(255, 255, 255);
-    bottom:0px;
-    right:0px;
-    left:0px;
+    margin-bottom: 0;
+    right: 0;
+    left: 0;
     z-index: 1000;
 }
-.tailed_left{
-    width: 145px;
-    margin-right: 125px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    flex-shrink: 0;
-    background-color: rgb(177, 13, 13);
+.tailed_left,
+.tailed_right{
+    display: none;
 }
-
 .tailed_center{
     display: flex;
     flex-direction: row;
     align-items: center;
-    flex: 1;
-    max-width: 650px;
-    background-color: rgb(164, 3, 205);
-
+    justify-content: center;
+    gap: 8px;
+    flex: 0 0 auto;
+    margin-left: 300px;
+    width: auto;
+    max-width: none;
+    padding: 0 12px;
+    background-color: rgb(255, 255, 255);
+}
+.tailed_center p{
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    text-align: center;
 }
 .tailed_right{
     display: flex;
@@ -42,3 +50,27 @@
     background-color: rgb(91, 255, 20);
 }
 
+@media (max-width: 840px){
+    .page_tailed{
+        justify-content: center; /* tailed 置中 */
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+    .tailed_center{
+        flex-direction: row; /* 保持平行 */
+        gap: 10px;
+        align-items: center;
+        justify-content: center; /* 整組置中 */
+        flex-wrap: wrap;
+        width: 100%;
+        max-width: 100%;
+        margin-left: 50;
+        transform: none;
+    }
+    .tailed_center p{
+        font-size: 14px;
+        text-align: center;
+        width: 100%;
+        margin: 0;
+    }
+}
