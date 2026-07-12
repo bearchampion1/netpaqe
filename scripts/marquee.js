@@ -76,6 +76,31 @@
         return s.replace(/"/g,'&quot;');
     }
 
+    // 嘗試把來源路徑改成同名 WebP；若原本就是 WebP 或無法辨識副檔名，則回傳原值
+    function toWebpCandidate(src){
+        if(!src) return '';
+        const value = String(src).trim();
+        if(!value) return '';
+
+        const fileName = value.split('/').pop() || '';
+        const webpName = fileName.replace(/\.(png|jpe?g|svg|ico)$/i, '.webp');
+        if(webpName === fileName) return value;
+
+        if(/^https?:\/\//i.test(value)){
+            return 'image/' + webpName;
+        }
+
+        if(value.startsWith('image/')){
+            return 'image/' + webpName;
+        }
+
+        if(value.startsWith('./')){
+            return 'image/' + webpName;
+        }
+
+        return 'image/' + webpName;
+    }
+
     // 由 .xlsx 讀取資料，優先嘗試以標頭列解析成物件陣列
     async function loadFromXLSX(url){
         // 如果 SheetJS (XLSX) 尚未載入，主動失敗以便上層可退回 CSV
@@ -171,19 +196,30 @@
             if(!src) return Promise.resolve();
             return new Promise((resolve) => {
                 const img = new Image();
+                const candidates = [];
+                const webpCandidate = toWebpCandidate(src);
+                if(webpCandidate && webpCandidate !== src) candidates.push(webpCandidate);
+                candidates.push(src);
+                let candidateIndex = 0;
+
                 img.onload = function(){
-                    ph.style.backgroundImage = `url('${src}')`;
+                    ph.style.backgroundImage = `url('${img.currentSrc || img.src}')`;
                     ph.classList.add('loaded');
                     ph.removeAttribute('data-src');
                     ph.setAttribute('aria-hidden','false');
                     resolve();
                 };
                 img.onerror = function(){
+                    candidateIndex += 1;
+                    if(candidateIndex < candidates.length){
+                        img.src = candidates[candidateIndex];
+                        return;
+                    }
                     ph.classList.add('error');
                     ph.removeAttribute('data-src');
                     resolve();
                 };
-                img.src = src;
+                img.src = candidates[candidateIndex];
             });
         }
 

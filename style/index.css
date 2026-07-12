@@ -24,7 +24,7 @@ html{
 body{
     min-height: 100vh;
     /* anime SVG background (responsive). fallback color kept. */
-    background: #f4f6fb url('../image/anime_bg.svg') center/cover no-repeat fixed;
+    background: #f4f6fb url('../image/anime_bg.webp') center/cover no-repeat fixed;
     padding-top: 112px; /* 保留 fixed header 空間 (100px) + 12px 間距 */
     padding-bottom: 80px;
     overflow-x: hidden !important;
