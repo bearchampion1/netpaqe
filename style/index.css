@@ -245,6 +245,8 @@ body.is-loaded .card_board .card_button{
     color: #4c5168;
     line-height: 1.8;
     max-width: 760px;
+    text-align: justify;
+    text-justify: inter-word;
 }
 @media (max-width: 1080px){
     .card_board, .marquee, .profile-card{

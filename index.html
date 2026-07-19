@@ -13,9 +13,20 @@
         <link rel="apple-touch-icon" sizes="180x180" href="image/apple-touch-icon.webp">
 
     </head>
-    <body>
+    <body id="top">
+        <nav class="page_menu" id="pageMenu" aria-label="頁面導覽選單" hidden>
+            <a href="#top" class="page_menu__link">首頁</a>
+            <a href="#social-portal" class="page_menu__link">社群傳送門</a>
+            <a href="#season-anime" class="page_menu__link">本季推薦動畫</a>
+            <a href="#profile" class="page_menu__link">個人敘述</a>
+        </nav>
         <div class="page_header">
             <div class="header_left">
+                <button class="menu_button" type="button" aria-label="開啟選單" aria-expanded="false" aria-controls="pageMenu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
             </div>
             <div class="header_center">
                 <img class="logo" src="image/螢幕擷取畫面 2025-09-26 115129.webp" alt="Logo">
@@ -27,7 +38,7 @@
             
 
         </div>
-        <div class="card_board_heading"><p class="card_board_headingText"><b>熊哥的社群傳送門</b></p></div>
+        <div class="card_board_heading" id="social-portal"><p class="card_board_headingText"><b>熊哥的社群傳送門</b></p></div>
         <div class="card_board">
             <a class="card_button" href="https://youtube.com/@bearchampionanime?si=1_06fL471YjVV3fM" target="_blank" rel="noopener">動漫YT頻道</a>
             <button class="card_button">DC聊天群</button>
@@ -36,21 +47,21 @@
         </div>
 
         <!-- 本季動畫推薦跑馬燈 (由外部 Excel 來源填充) -->
-        <div class="marquee-heading">本季推薦動畫</div>
+        <div class="marquee-heading" id="season-anime">本季推薦動畫</div>
         <div class="marquee" aria-label="本季動畫推薦的跑馬燈" data-src="https://docs.google.com/spreadsheets/d/1DSA4F9A_JOyXvgfW87-uGYrr7isI0sPEM_1H2dHcL70/export?format=xlsx">
             <div class="marquee__inner">
                 <span class="marquee__item">載入中...</span>
             </div>
         </div>
 
-        <section class="profile-card" aria-label="個人敘述卡片">
+        <section class="profile-card" id="profile" aria-label="個人敘述卡片">
             <div class="profile-card__media">
                 <img src="image/IMG_5412.JPG" alt="熊哥的個人照片">
             </div>
             <div class="profile-card__body">
                 <span class="profile-card__eyebrow">個人敘述</span>
                 <h2 class="profile-card__title">我是熊哥</h2>
-                <p class="profile-card__text">歡迎來到我的網站，這裡分享本季最值得追的動畫推薦、個人觀影心得，以及最新影音動態。喜歡動畫、遊戲與創意美術，我會把最強主題整理在這裡。</p>
+                <p class="profile-card__text">歡迎來到我的網站，這裡分享本季最值得追的動畫推薦、個人觀影心得，以及最新影音動態。喜歡動畫、程式設計等相關內容，我會把最強主題整理在這裡。</p>
             </div>
         </section>
 
