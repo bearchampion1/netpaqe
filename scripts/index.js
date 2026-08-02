@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
     var menuButton = document.querySelector('.menu_button');
     var pageMenu = document.getElementById('pageMenu');
+    var pageHeader = document.querySelector('.page_header');
 
     if(menuButton && pageMenu){
         var setMenuOpen = function(isOpen){
@@ -42,6 +43,41 @@ document.addEventListener('DOMContentLoaded', function(){
                 setMenuOpen(false);
             }
         });
+    }
+
+    // Hide/show header on scroll
+    if(pageHeader){
+        var lastScrollTop = 0;
+        var isHeaderHidden = false;
+        var scrollTimeout = null;
+
+        window.addEventListener('scroll', function(){
+            if(scrollTimeout){
+                window.clearTimeout(scrollTimeout);
+            }
+
+            scrollTimeout = window.setTimeout(function(){
+                var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+                // Determine scroll direction
+                if(scrollTop > lastScrollTop && scrollTop > 100){
+                    // Scrolling down - hide header
+                    if(!isHeaderHidden){
+                        pageHeader.classList.add('is-hidden');
+                        isHeaderHidden = true;
+                    }
+                } else {
+                    // Scrolling up - show header
+                    if(isHeaderHidden){
+                        pageHeader.classList.remove('is-hidden');
+                        isHeaderHidden = false;
+                    }
+                }
+
+                lastScrollTop = scrollTop;
+                scrollTimeout = null;
+            }, 50);
+        }, { passive: true });
     }
 
     var ytButton = document.querySelector('.card_board a.card_button[href*="youtube.com"]');

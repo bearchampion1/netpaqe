@@ -1,0 +1,122 @@
+body{
+    background: linear-gradient(135deg, #0f1b4d 0%, #2b4cff 45%, #4fd1ff 100%);
+}
+
+.portfolio-page{
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 24px 20px 80px;
+}
+
+.portfolio-hero{
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 24px;
+    padding: 32px;
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.16);
+    margin-bottom: 24px;
+    margin-top: 120px;
+}
+
+.portfolio-hero__eyebrow{
+    display: inline-block;
+    margin-bottom: 12px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: #3957f8;
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+}
+
+.portfolio-hero h1{
+    font-size: clamp(28px, 4vw, 42px);
+    color: #111827;
+    margin-bottom: 12px;
+}
+
+.portfolio-hero__text{
+    font-size: 18px;
+    line-height: 1.7;
+    color: #374151;
+    max-width: 720px;
+}
+
+.portfolio-hero__actions{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.portfolio-pill{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 18px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #ff7c00, #ffbe2d);
+    color: #111;
+    font-weight: 700;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+}
+
+.portfolio-pill--secondary{
+    background: #ffffff;
+    color: #111827;
+    border: 1px solid #dbe4ff;
+}
+
+.portfolio-grid{
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.portfolio-card{
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 16px 34px rgba(0, 0, 0, 0.14);
+}
+
+.portfolio-card__tag{
+    display: inline-block;
+    margin-bottom: 10px;
+    color: #3957f8;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.portfolio-card h2{
+    font-size: 22px;
+    margin-bottom: 8px;
+    color: #111827;
+}
+
+.portfolio-card p{
+    color: #4b5563;
+    line-height: 1.7;
+    margin-bottom: 16px;
+}
+
+.portfolio-card a{
+    color: #3957f8;
+    font-weight: 700;
+}
+
+@media (max-width: 840px){
+    .portfolio-page{
+        padding: 18px 14px 60px;
+    }
+
+    .portfolio-hero{
+        padding: 24px 18px;
+    }
+
+    .portfolio-grid{
+        grid-template-columns: 1fr;
+    }
+}
