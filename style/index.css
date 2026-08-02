@@ -190,6 +190,148 @@ body.is-loaded .card_board .card_button{
     overflow: hidden;
     position: relative;
 }
+.pv-section{
+    width: 100%;
+    max-width: none;
+    margin: 0 auto 48px;
+    padding: 20px;
+    background: rgba(12, 16, 32, 0.48);
+    border: 1px solid transparent;
+    border-radius: 22px;
+    box-shadow: 0 12px 36px rgba(0,0,0,0.18);
+}
+.pv-heading{
+    display: block;
+    width: fit-content;
+    margin: 0 auto 18px;
+    padding: 12px 18px;
+    background: linear-gradient(135deg,#ff7c00,#ffbe2d);
+    color: #111;
+    font-size: 16px;
+    font-weight: 700;
+    border-radius: 18px;
+    letter-spacing: 0.08em;
+    text-align: center;
+}
+.pv-heading.marquee-heading{
+    background: linear-gradient(135deg,#ff7c00,#ffbe2d);
+    color: #111;
+    box-shadow: none;
+}
+.pv-carousel{
+    position: relative;
+    overflow: hidden;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid transparent;
+}
+.pv-carousel__track{
+    display: flex;
+    gap: 16px;
+    transition: transform 320ms ease;
+    will-change: transform;
+    padding: 16px;
+    list-style: none;
+    margin: 0;
+    touch-action: pan-y;
+}
+.movieList.swiper-slide{
+    min-width: 320px;
+    width: min(460px, 80vw);
+    max-width: 460px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    border-radius: 22px;
+    overflow: hidden;
+    background: transparent;
+    box-shadow: 0 14px 34px rgba(0,0,0,0.2);
+    cursor: grab;
+    user-select: none;
+    opacity: 0.35;
+    transform: scale(0.96);
+    transition: opacity 280ms ease, transform 280ms ease;
+}
+.movieList.swiper-slide.active{
+    opacity: 1;
+    transform: scale(1.02);
+}
+.movieList.swiper-slide:active{
+    cursor: grabbing;
+}
+.movieList__header{
+    padding: 0 12px 0 12px;
+}
+.movieList__thumb{
+    position: relative;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    background: none;
+    cursor: pointer;
+    display: block;
+    width: 100%;
+    overflow: hidden;
+}
+.movieList__thumb img{
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+    aspect-ratio: 16 / 9;
+}
+.movieList__title{
+    margin: 0;
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.35;
+    text-align: center;
+    text-shadow: 0 0 10px rgba(0,0,0,0.65);
+    background: rgba(0,0,0,0.26);
+    padding: 10px 12px;
+    border-radius: 16px;
+    display: inline-block;
+    width: 100%;
+}
+.movieList__thumb:focus-visible,
+.movieList__thumb:hover{
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(255,255,255,0.14);
+}
+.pv-carousel__message{
+    color: #f2f6ff;
+    width: 100%;
+    padding: 40px;
+    text-align: center;
+    font-size: 16px;
+}
+.pv-carousel__nav{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin: 16px 0 0;
+}
+.pv-carousel__nav button{
+    padding: 10px 16px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,0.18);
+    background: rgba(255,255,255,0.08);
+    color: #fff;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background 200ms ease, transform 200ms ease, border-color 200ms ease;
+}
+.pv-carousel__nav button:hover,
+.pv-carousel__nav button.active{
+    background: rgba(255,255,255,0.18);
+    border-color: rgba(255,255,255,0.35);
+    transform: translateY(-1px);
+}
+.pv-carousel--dragging .movieList.swiper-slide{
+    transition: none;
+}
 .profile-card{
     max-width: 980px;
     margin: 0 auto 48px;

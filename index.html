@@ -36,6 +36,7 @@
             <a href="#top" class="page_menu__link">首頁</a>
             <a href="#social-portal" class="page_menu__link">社群傳送門</a>
             <a href="#season-anime" class="page_menu__link">本季推薦動畫</a>
+            <a href="#pv-carousel" class="page_menu__link">新番PV</a>
             <a href="#profile" class="page_menu__link">個人敘述</a>
         </nav>
         <div class="page_header">
@@ -72,12 +73,23 @@
             </div>
         </div>
 
+        <!-- 新番 PV 跑馬燈，使用預先下載的本地資料以避免頁面啟動時再次從雲端抓取 -->
+        <div class="pv-section" id="pv-carousel">
+            <div class="marquee-heading pv-heading">新番PV</div>
+            <div class="pv-carousel" aria-label="新番PV影片卡片跑馬燈" data-src="data/pv.json" data-autoplay-interval="6000">
+                <ul class="pv-carousel__track movieList">
+                    <li class="pv-carousel__message">載入中...</li>
+                </ul>
+                <div class="pv-carousel__nav"></div>
+            </div>
+        </div>
+
         <section class="profile-card" id="profile" aria-label="個人敘述卡片">
             <div class="profile-card__media">
                 <img src="image/IMG_5412.JPG" alt="熊哥的個人照片">
             </div>
             <div class="profile-card__body">
-                <span class="profile-card__eyebrow">個人敘述</span>
+                <span class="profile-card__eyebrow">個人簡述</span>
                 <h2 class="profile-card__title">我是熊哥</h2>
                 <p class="profile-card__text">歡迎來到我的網站，這裡分享本季最值得追的動畫推薦、個人觀影心得，以及最新影音動態。喜歡動畫、程式設計等相關內容，我會把最強主題整理在這裡。</p>
             </div>
@@ -97,5 +109,6 @@
     </body>
     <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
     <script src="scripts/marquee.js"></script>
+    <script src="scripts/pv-carousel.js"></script>
     <script src="scripts/index.js"></script>
 </html>
