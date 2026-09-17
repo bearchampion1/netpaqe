@@ -1,5 +1,5 @@
 import { useState, useEffect, createContext, useContext } from 'react';
-import { HashRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route, Link, useLocation, Navigate } from 'react-router-dom';
 import { GoogleOAuthProvider, GoogleLogin, googleLogout } from '@react-oauth/google';
 import { jwtDecode } from 'jwt-decode';
 
@@ -9,6 +9,20 @@ import AdminPanel from './components/AdminPanel';
 import Settings from './components/Settings';
 
 export const UserContext = createContext();
+
+// 取得環境變數中的管理員 Email 清單，並轉換為陣列
+const ADMIN_EMAILS = (import.meta.env.VITE_ADMIN_EMAILS || '')
+  .split(',')
+  .map(email => email.trim().toLowerCase())
+  .filter(email => email.length > 0);
+
+const isUserAdmin = (user) => {
+  if (!user || !user.email) return false;
+  // 如果沒有設定任何管理員，預設任何人登入都可以是管理員 (方便開發)，或是嚴格限制？
+  // 為了安全，如果有設定環境變數，就只允許清單內的人。如果完全沒設定，就允許所有登入者。
+  if (ADMIN_EMAILS.length === 0) return true; 
+  return ADMIN_EMAILS.includes(user.email.toLowerCase());
+};
 
 function Nav() {
   const location = useLocation();
@@ -29,20 +43,26 @@ function Nav() {
     </Link>
   );
 
+  const isAdmin = isUserAdmin(user);
+
   return (
     <nav className="flex justify-between items-center p-4 border-b">
       <div className="flex gap-4">
         {navLink('/', '入口首頁')}
         {navLink('/game', '開始遊戲')}
-        {navLink('/admin', '後台新增')}
-        {navLink('/settings', '資料庫設定')}
+        {/* 只有具備管理員權限才顯示後台與設定連結 */}
+        {isAdmin && navLink('/admin', '後台新增')}
+        {isAdmin && navLink('/settings', '資料庫設定')}
       </div>
       
       <div className="flex items-center gap-4">
         {user ? (
           <div className="flex items-center gap-2">
             <img src={user.picture} alt="avatar" className="w-8 h-8 rounded-full" />
-            <span className="font-bold text-gray-700">{user.name}</span>
+            <div className="flex flex-col text-right">
+              <span className="font-bold text-gray-700 leading-tight">{user.name}</span>
+              {isAdmin && <span className="text-[10px] text-red-500 font-bold leading-none">管理員</span>}
+            </div>
             <button 
               onClick={() => {
                 googleLogout();
@@ -74,6 +94,33 @@ function Nav() {
   );
 }
 
+// 保護路由組件：檢查是否登入且具有管理員權限
+const ProtectedRoute = ({ children }) => {
+  const { user } = useContext(UserContext);
+  
+  if (!user) {
+    return (
+      <div className="flex-1 flex flex-col items-center justify-center">
+        <h2 className="text-2xl font-bold mb-4 text-red-600">未登入</h2>
+        <p className="text-gray-600 mb-4">請先使用 Google 帳號登入才能存取此頁面。</p>
+        <Link to="/game" className="px-4 py-2 bg-black text-white rounded font-bold">返回遊戲</Link>
+      </div>
+    );
+  }
+
+  if (!isUserAdmin(user)) {
+    return (
+      <div className="flex-1 flex flex-col items-center justify-center">
+        <h2 className="text-2xl font-bold mb-4 text-red-600">權限不足</h2>
+        <p className="text-gray-600 mb-4">抱歉，您的帳號 ({user.email}) 沒有後台管理權限。</p>
+        <Link to="/game" className="px-4 py-2 bg-black text-white rounded font-bold">返回遊戲</Link>
+      </div>
+    );
+  }
+  
+  return children;
+};
+
 export default function App() {
   const currentYear = new Date().getFullYear();
   const [user, setUser] = useState(null);
@@ -97,8 +144,12 @@ export default function App() {
               <Routes>
                 <Route path="/" element={<LandingPage />} />
                 <Route path="/game" element={<GamePanel />} />
-                <Route path="/admin" element={<AdminPanel />} />
-                <Route path="/settings" element={<Settings />} />
+                <Route path="/admin" element={
+                  <ProtectedRoute><AdminPanel /></ProtectedRoute>
+                } />
+                <Route path="/settings" element={
+                  <ProtectedRoute><Settings /></ProtectedRoute>
+                } />
               </Routes>
             </main>
             <footer className="bg-black text-white text-center py-4 text-sm font-bold">
