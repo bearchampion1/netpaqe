@@ -74,7 +74,8 @@ export default function LandingPage() {
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, type: 'spring' }}
-          className="text-4xl md:text-6xl font-bold tracking-widest text-gray-900 mb-8"
+          className="font-bold tracking-widest text-gray-900 mb-8"
+          style={{ fontSize: 'clamp(2rem, 8vw, 4rem)', whiteSpace: 'nowrap' }}
         >
           自他動詞遊戲室
         </motion.h1>

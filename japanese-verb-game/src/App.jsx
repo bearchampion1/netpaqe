@@ -34,7 +34,8 @@ function Nav() {
   const navLink = (path, label) => (
     <Link 
       to={path} 
-      className={`font-bold px-3 py-2 rounded text-sm md:text-base whitespace-nowrap shrink-0 break-keep ${
+      style={{ whiteSpace: 'nowrap' }}
+      className={`font-bold px-2 py-1 sm:px-3 sm:py-2 rounded text-xs sm:text-sm md:text-base shrink-0 ${
         location.pathname === path 
           ? 'bg-black text-white' 
           : 'text-gray-600 hover:bg-gray-100'
@@ -47,8 +48,8 @@ function Nav() {
   const isAdmin = isUserAdmin(user);
 
   return (
-    <nav className="flex flex-col md:flex-row justify-between items-center p-4 border-b gap-4">
-      <div className="flex flex-wrap justify-center gap-2">
+    <nav className="flex flex-col md:flex-row justify-between items-center p-2 sm:p-4 border-b gap-2 sm:gap-4">
+      <div className="flex flex-wrap justify-center gap-1 sm:gap-2">
         {navLink('/', '入口首頁')}
         {navLink('/game', '開始遊戲')}
         {navLink('/feedback', '意見回饋')}

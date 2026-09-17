@@ -154,8 +154,13 @@ export default function GamePanel() {
 
   if (!gameStarted) {
     return (
-      <div className="max-w-md mx-auto mt-20 text-center">
-        <h1 className="text-3xl font-bold mb-8">日文自他動詞測驗</h1>
+      <div className="max-w-md mx-auto mt-20 text-center px-4">
+        <h1 
+          className="font-bold mb-8" 
+          style={{ fontSize: 'clamp(1.5rem, 6vw, 1.875rem)', whiteSpace: 'nowrap' }}
+        >
+          日文自他動詞測驗
+        </h1>
         <p className="mb-8 text-gray-600">目前題庫擁有 {verbs.length} 個單字</p>
         
         <div className="space-y-6">
