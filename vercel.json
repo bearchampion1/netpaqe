@@ -4,15 +4,15 @@
   "outputDirectory": ".",
   "rewrites": [
     {
-      "source": "/japanese-verb-game/(.*)",
-      "destination": "/japanese-verb-game/dist/$1"
+      "source": "/japanese-verb-game/assets/(.*)",
+      "destination": "/japanese-verb-game/dist/assets/$1"
     },
     {
-      "source": "/jp-game",
+      "source": "/jp-game(.*)",
       "destination": "/japanese-verb-game/dist/index.html"
     },
     {
-      "source": "/japanese-verb-game",
+      "source": "/japanese-verb-game(.*)",
       "destination": "/japanese-verb-game/dist/index.html"
     }
   ]
