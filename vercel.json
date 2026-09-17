@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "buildCommand": "npm --prefix japanese-verb-game install && npm --prefix japanese-verb-game run build",
+  "outputDirectory": ".",
+  "rewrites": [
+    {
+      "source": "/japanese-verb-game/assets/(.*)",
+      "destination": "/japanese-verb-game/dist/assets/$1"
+    },
+    {
+      "source": "/japanese-verb-game/",
+      "destination": "/japanese-verb-game/dist/index.html"
+    }
+  ]
+}

@@ -33,45 +33,47 @@
         </div>
 
         <main class="portfolio-page">
-            <section class="portfolio-hero">
-                <p class="portfolio-hero__eyebrow">作品集</p>
-                <h1>把喜歡的內容整理成一個可瀏覽的作品頁</h1>
-                <p class="portfolio-hero__text">這裡整理了動畫推薦、影音內容、社群分享與個人創作方向，讓訪客可以更快速地看到熊哥想分享的內容風格。</p>
-                <div class="portfolio-hero__actions">
-                    <a class="portfolio-pill" href="index.html">回到首頁</a>
-                    <a class="portfolio-pill portfolio-pill--secondary" href="index.html#season-anime">查看推薦動畫</a>
-                </div>
+            <section class="portfolio-intro" aria-labelledby="portfolio-title">
+                <p class="portfolio-intro__index">作品集 / 2026</p>
+                <h1 id="portfolio-title">把喜歡的內容，整理成值得回看的作品。</h1>
+                <p class="portfolio-intro__text">動畫推薦、影音企劃與個人創作，依照觀看順序收在這裡。</p>
             </section>
 
-            <section class="portfolio-grid" aria-label="作品集內容">
-                <article class="portfolio-card">
-                    <span class="portfolio-card__tag">影音內容</span>
-                    <h2>動漫YT頻道</h2>
-                    <p>分享動畫觀後感、當季推薦與觀影心得，持續整理有趣的內容給觀眾。</p>
-                    <a href="https://youtube.com/@bearchampionanime?si=1_06fL471YjVV3fM" target="_blank" rel="noopener">前往頻道</a>
+            <section class="portfolio-list" aria-label="作品列表">
+                <article class="portfolio-work">
+                    <div class="portfolio-work__media">
+                        <img src="image/死亡遊戲12上小說.png" alt="死亡遊戲上集小說分享封面">
+                        <span class="portfolio-work__play">播放預覽</span>
+                    </div>
+                    <div class="portfolio-work__meta">
+                        <p class="portfolio-work__label">VIDEO / STORY</p>
+                        <h2>死亡遊戲 12 上集小說</h2>
+                        <dl>
+                            <div><dt>類型</dt><dd>劇情分享</dd></div>
+                            <div><dt>平台</dt><dd>熊哥動漫 YT</dd></div>
+                            <div><dt>年份</dt><dd>2026</dd></div>
+                        </dl>
+                    </div>
+                    <div class="portfolio-work__description">
+                        <p>把複雜的故事線整理成容易進入的觀看體驗，保留作品的情緒，也讓第一次接觸的觀眾快速理解世界觀。</p>
+                        <a href="https://youtube.com/@bearchampionanime?si=1_06fL471YjVV3fM" target="_blank" rel="noopener">查看頻道 <span aria-hidden="true">↗</span></a>
+                    </div>
                 </article>
 
-                <article class="portfolio-card">
-                    <span class="portfolio-card__tag">內容整理</span>
-                    <h2>本季推薦動畫</h2>
-                    <p>把值得追的作品與觀點整理成清楚的推薦列表，方便快速找到想看的動畫。</p>
-                    <a href="index.html#season-anime">查看推薦</a>
-                </article>
+                <a class="portfolio-game-card" href="/japanese-verb-game/dist/index.html" aria-label="進入自他動詞遊戲室">
+                    <div class="portfolio-game-card__image">
+                        <img src="image/螢幕擷取畫面 2026-09-17 193135.png" alt="自他動詞遊戲室入口畫面">
+                    </div>
+                    <div class="portfolio-game-card__content">
+                        <p class="portfolio-work__label">INTERACTIVE / GAME</p>
+                        <h2>自他動詞遊戲室</h2>
+                        <span class="portfolio-game-card__link">進入遊戲 <span aria-hidden="true">↗</span></span>
+                    </div>
+                </a>
 
-                <article class="portfolio-card">
-                    <span class="portfolio-card__tag">社群連結</span>
-                    <h2>社群傳送門</h2>
-                    <p>整合 YouTube、DC 與其他社群入口，讓各種內容都能快速找到。</p>
-                    <a href="index.html#social-portal">查看入口</a>
-                </article>
-
-                <article class="portfolio-card">
-                    <span class="portfolio-card__tag">個人風格</span>
-                    <h2>作品風格與定位</h2>
-                    <p>以動畫、視覺與整理內容為核心，打造一個溫暖、簡潔且有辨識度的網站形象。</p>
-                    <a href="index.html#profile">了解更多</a>
-                </article>
             </section>
+
+            <p class="portfolio-repeat">repeat<span aria-hidden="true">...</span></p>
         </main>
 
         <div class="page_tailed">
