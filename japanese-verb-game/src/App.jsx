@@ -7,6 +7,7 @@ import LandingPage from './components/LandingPage';
 import GamePanel from './components/GamePanel';
 import AdminPanel from './components/AdminPanel';
 import Settings from './components/Settings';
+import FeedbackPanel from './components/FeedbackPanel';
 
 export const UserContext = createContext();
 
@@ -33,7 +34,7 @@ function Nav() {
   const navLink = (path, label) => (
     <Link 
       to={path} 
-      className={`font-bold px-4 py-2 rounded ${
+      className={`font-bold px-3 py-2 rounded text-sm md:text-base whitespace-nowrap shrink-0 break-keep ${
         location.pathname === path 
           ? 'bg-black text-white' 
           : 'text-gray-600 hover:bg-gray-100'
@@ -46,21 +47,22 @@ function Nav() {
   const isAdmin = isUserAdmin(user);
 
   return (
-    <nav className="flex justify-between items-center p-4 border-b">
-      <div className="flex gap-4">
+    <nav className="flex flex-col md:flex-row justify-between items-center p-4 border-b gap-4">
+      <div className="flex flex-wrap justify-center gap-2">
         {navLink('/', '入口首頁')}
         {navLink('/game', '開始遊戲')}
+        {navLink('/feedback', '意見回饋')}
         {/* 只有具備管理員權限才顯示後台與設定連結 */}
         {isAdmin && navLink('/admin', '後台新增')}
         {isAdmin && navLink('/settings', '資料庫設定')}
       </div>
       
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-4 mt-2 md:mt-0">
         {user ? (
           <div className="flex items-center gap-2">
             <img src={user.picture} alt="avatar" className="w-8 h-8 rounded-full" />
             <div className="flex flex-col text-right">
-              <span className="font-bold text-gray-700 leading-tight">{user.name}</span>
+              <span className="font-bold text-gray-700 leading-tight text-sm md:text-base">{user.name}</span>
               {isAdmin && <span className="text-[10px] text-red-500 font-bold leading-none">管理員</span>}
             </div>
             <button 
@@ -69,13 +71,13 @@ function Nav() {
                 setUser(null);
                 localStorage.removeItem('user_profile');
               }}
-              className="text-sm text-gray-500 hover:text-black ml-2 font-bold"
+              className="text-xs md:text-sm text-gray-500 hover:text-black ml-2 font-bold whitespace-nowrap"
             >
               登出
             </button>
           </div>
         ) : (
-          <div className="scale-75 origin-right">
+          <div className="scale-90 md:scale-75 origin-center md:origin-right">
             <GoogleLogin
               onSuccess={credentialResponse => {
                 const decoded = jwtDecode(credentialResponse.credential);
@@ -144,6 +146,7 @@ export default function App() {
               <Routes>
                 <Route path="/" element={<LandingPage />} />
                 <Route path="/game" element={<GamePanel />} />
+                <Route path="/feedback" element={<FeedbackPanel />} />
                 <Route path="/admin" element={
                   <ProtectedRoute><AdminPanel /></ProtectedRoute>
                 } />

@@ -69,12 +69,12 @@ export default function LandingPage() {
       <div className="flex-1"></div>
       
       {/* Center content */}
-      <div className="flex-1 flex flex-col items-center justify-center">
+      <div className="flex-1 flex flex-col items-center justify-center px-4 text-center">
         <motion.h1 
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, type: 'spring' }}
-          className="text-6xl font-bold tracking-widest text-gray-900 mb-8 text-center"
+          className="text-4xl md:text-6xl font-bold tracking-widest text-gray-900 mb-8"
         >
           自他動詞遊戲室
         </motion.h1>
@@ -83,7 +83,7 @@ export default function LandingPage() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1, duration: 1, repeat: Infinity, repeatType: 'reverse' }}
-          className="text-gray-500 tracking-widest text-sm"
+          className="text-gray-500 tracking-widest text-xs md:text-sm"
         >
           - 點擊畫面任意處進入 -
         </motion.p>

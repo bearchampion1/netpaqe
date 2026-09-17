@@ -43,3 +43,19 @@ export const saveGameRecord = async (payload) => {
   
   return response.data;
 };
+
+export const submitFeedback = async (payload) => {
+  const url = getApiUrl();
+  if (!url) throw new Error("尚未設定 Google Apps Script API 網址");
+
+  const response = await axios.post(url, JSON.stringify({
+    action: 'submit_feedback',
+    payload
+  }), {
+    headers: {
+      'Content-Type': 'text/plain;charset=utf-8',
+    }
+  });
+  
+  return response.data;
+};

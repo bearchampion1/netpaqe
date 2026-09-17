@@ -239,13 +239,13 @@ export default function GamePanel() {
           key={currentQ.id}
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-6xl font-bold"
+          className="text-5xl md:text-6xl font-bold"
         >
           {currentQ.word}
         </motion.div>
       </div>
 
-      <div className="flex justify-center gap-8 h-24 relative items-start">
+      <div className="flex justify-center gap-4 md:gap-8 h-24 relative items-start">
         <AnimatePresence mode="popLayout">
           {(!answered || (answered && isCorrectAnswerIn)) && (
             <motion.button
@@ -291,12 +291,12 @@ export default function GamePanel() {
         </AnimatePresence>
       </div>
 
-      <div className="h-20 flex items-center justify-center mt-4">
+      <div className="h-20 flex items-center justify-center mt-4 px-4 text-center">
         {answered && (
           <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="text-2xl font-bold"
+            className="text-xl md:text-2xl font-bold"
           >
             <span className={isCorrectAnswerIn ? 'text-blue-600' : 'text-green-600'}>
               【{currentQ.type}】
