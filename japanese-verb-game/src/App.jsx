@@ -25,9 +25,52 @@ const isUserAdmin = (user) => {
   return ADMIN_EMAILS.includes(user.email.toLowerCase());
 };
 
+function AuthBlock({ className }) {
+  const { user, setUser } = useContext(UserContext);
+  const isAdmin = isUserAdmin(user);
+
+  return (
+    <div className={`flex items-center gap-4 ${className}`}>
+      {user ? (
+        <div className="flex items-center gap-2">
+          <img src={user.picture} alt="avatar" className="w-8 h-8 rounded-full" />
+          <div className="flex flex-col text-right">
+            <span className="font-bold text-gray-700 leading-tight text-sm md:text-base">{user.name}</span>
+            {isAdmin && <span className="text-[10px] text-red-500 font-bold leading-none">管理員</span>}
+          </div>
+          <button 
+            onClick={() => {
+              googleLogout();
+              setUser(null);
+              localStorage.removeItem('user_profile');
+            }}
+            className="text-xs md:text-sm text-gray-500 hover:text-black ml-2 font-bold whitespace-nowrap"
+          >
+            登出
+          </button>
+        </div>
+      ) : (
+        <div className="scale-90 md:scale-75 origin-center md:origin-right">
+          <GoogleLogin
+            onSuccess={credentialResponse => {
+              const decoded = jwtDecode(credentialResponse.credential);
+              setUser(decoded);
+              localStorage.setItem('user_profile', JSON.stringify(decoded));
+            }}
+            onError={() => {
+              console.log('Login Failed');
+            }}
+            useOneTap
+          />
+        </div>
+      )}
+    </div>
+  );
+}
+
 function Nav() {
   const location = useLocation();
-  const { user, setUser } = useContext(UserContext);
+  const { user } = useContext(UserContext);
   
   if (location.pathname === '/') return null;
   
@@ -48,7 +91,7 @@ function Nav() {
   const isAdmin = isUserAdmin(user);
 
   return (
-    <nav className="flex flex-col md:flex-row justify-between items-center p-2 sm:p-4 border-b gap-2 sm:gap-4">
+    <nav className="flex flex-col md:flex-row justify-between items-center p-2 sm:p-4 border-b gap-2 sm:gap-4 bg-white z-10">
       <div className="flex flex-wrap justify-center gap-1 sm:gap-2">
         {navLink('/', '入口首頁')}
         {navLink('/game', '開始遊戲')}
@@ -58,42 +101,20 @@ function Nav() {
         {isAdmin && navLink('/settings', '資料庫設定')}
       </div>
       
-      <div className="flex items-center gap-4 mt-2 md:mt-0">
-        {user ? (
-          <div className="flex items-center gap-2">
-            <img src={user.picture} alt="avatar" className="w-8 h-8 rounded-full" />
-            <div className="flex flex-col text-right">
-              <span className="font-bold text-gray-700 leading-tight text-sm md:text-base">{user.name}</span>
-              {isAdmin && <span className="text-[10px] text-red-500 font-bold leading-none">管理員</span>}
-            </div>
-            <button 
-              onClick={() => {
-                googleLogout();
-                setUser(null);
-                localStorage.removeItem('user_profile');
-              }}
-              className="text-xs md:text-sm text-gray-500 hover:text-black ml-2 font-bold whitespace-nowrap"
-            >
-              登出
-            </button>
-          </div>
-        ) : (
-          <div className="scale-90 md:scale-75 origin-center md:origin-right">
-            <GoogleLogin
-              onSuccess={credentialResponse => {
-                const decoded = jwtDecode(credentialResponse.credential);
-                setUser(decoded);
-                localStorage.setItem('user_profile', JSON.stringify(decoded));
-              }}
-              onError={() => {
-                console.log('Login Failed');
-              }}
-              useOneTap
-            />
-          </div>
-        )}
-      </div>
+      {/* 桌面版的登入區塊 (大於 md 顯示) */}
+      <AuthBlock className="hidden md:flex" />
     </nav>
+  );
+}
+
+function MobileAuth() {
+  const location = useLocation();
+  if (location.pathname === '/') return null;
+  
+  return (
+    <div className="md:hidden flex justify-center items-center py-3 bg-gray-50 border-t">
+      <AuthBlock className="flex" />
+    </div>
   );
 }
 
@@ -156,6 +177,7 @@ export default function App() {
                 } />
               </Routes>
             </main>
+            <MobileAuth />
             <footer className="bg-black text-white text-center py-4 text-sm font-bold">
               {currentYear} &copy; 熊哥 & Antigravity
             </footer>
