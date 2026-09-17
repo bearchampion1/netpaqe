@@ -8,6 +8,10 @@
       "destination": "/japanese-verb-game/dist/assets/$1"
     },
     {
+      "source": "/japanese-verb-game",
+      "destination": "/japanese-verb-game/dist/index.html"
+    },
+    {
       "source": "/japanese-verb-game/",
       "destination": "/japanese-verb-game/dist/index.html"
     }
