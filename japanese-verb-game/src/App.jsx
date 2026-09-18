@@ -10,6 +10,7 @@ import Settings from './components/Settings';
 import FeedbackPanel from './components/FeedbackPanel';
 import Profile from './components/Profile';
 import { ensureUserExists } from './api/database';
+import { supabase } from './api/supabaseClient';
 
 export const UserContext = createContext();
 
@@ -31,8 +32,9 @@ function AuthBlock({ className }) {
             {isAdmin && <span className="text-[10px] text-red-500 font-bold leading-none">管理員</span>}
           </div>
           <button 
-            onClick={() => {
+            onClick={async () => {
               googleLogout();
+              await supabase.auth.signOut();
               setUser(null);
               localStorage.removeItem('user_profile');
             }}
@@ -42,21 +44,41 @@ function AuthBlock({ className }) {
           </button>
         </div>
       ) : (
-        <div className="scale-90 md:scale-75 origin-center md:origin-right">
-          <GoogleLogin
-            onSuccess={async (credentialResponse) => {
-              const decoded = jwtDecode(credentialResponse.credential);
-              // Save to Supabase and get role
-              const dbUser = await ensureUserExists(decoded);
-              const finalUser = { ...decoded, role: dbUser?.role || 'player' };
-              setUser(finalUser);
-              localStorage.setItem('user_profile', JSON.stringify(finalUser));
+        <div className="flex flex-col md:flex-row items-center gap-2 scale-90 md:scale-100 origin-center md:origin-right">
+          <button
+            onClick={async () => {
+              const { error } = await supabase.auth.signInWithOAuth({
+                provider: 'custom:line',
+              });
+              if (error) {
+                console.error('LINE login error:', error);
+                alert('LINE 登入設定可能尚未完成或名稱錯誤！');
+              }
             }}
-            onError={() => {
-              console.log('Login Failed');
-            }}
-            useOneTap
-          />
+            className="bg-[#06C755] hover:bg-[#05b34c] text-white font-bold py-[6px] px-4 rounded text-sm whitespace-nowrap flex items-center justify-center h-[40px] w-[200px]"
+          >
+            <svg viewBox="0 0 44 44" className="w-5 h-5 mr-2 fill-current">
+              <path d="M43.6 20.1c0-8.9-8.9-16.1-19.8-16.1S4 11.2 4 20.1c0 8 7.3 14.7 16.9 15.9 1.9.4 3.7 1.2 4.3 3.1.5 1.7.3 3.4.1 4.7-.2 1.5-1 4.7 4.1 2.5 5.2-2.2 14.2-8.3 14.2-26.2zm-28.7 5.7c-.5 0-.9-.4-.9-.9v-7.2c0-.5.4-.9.9-.9s.9.4.9.9v6.3h3.5c.5 0 .9.4.9.9s-.4.9-.9.9h-4.4zm9.3 0c-.5 0-.9-.4-.9-.9v-7.2c0-.5.4-.9.9-.9s.9.4.9.9v7.2c0 .5-.4.9-.9.9zm6.6 0h-4.2c-.5 0-.9-.4-.9-.9v-7.2c0-.5.4-.9.9-.9s.9.4.9.9v3.4l3.1-4c.2-.2.5-.3.7-.3.5 0 .9.4.9.9v7.2c0 .5-.4.9-.9.9s-.9-.4-.9-.9v-3.4l-3.1 4c-.2.2-.4.4-.7.4zm7.9-6.3h-3.5v1.8h3.5c.5 0 .9.4.9.9s-.4.9-.9.9h-3.5v1.8h3.5c.5 0 .9.4.9.9s-.4.9-.9.9h-4.4c-.5 0-.9-.4-.9-.9v-7.2c0-.5.4-.9.9-.9h4.4c.5 0 .9.4.9.9s-.4.9-.9.9z"/>
+            </svg>
+            用 LINE 登入
+          </button>
+          
+          <div className="h-[40px]">
+            <GoogleLogin
+              onSuccess={async (credentialResponse) => {
+                const decoded = jwtDecode(credentialResponse.credential);
+                // Save to Supabase and get role
+                const dbUser = await ensureUserExists(decoded);
+                const finalUser = { ...decoded, role: dbUser?.role || 'player' };
+                setUser(finalUser);
+                localStorage.setItem('user_profile', JSON.stringify(finalUser));
+              }}
+              onError={() => {
+                console.log('Login Failed');
+              }}
+              useOneTap
+            />
+          </div>
         </div>
       )}
     </div>
@@ -152,6 +174,27 @@ export default function App() {
     if (savedUser) {
       setUser(JSON.parse(savedUser));
     }
+
+    // 監聽 Supabase 的登入狀態 (給 LINE 登入用)
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        if (event === 'SIGNED_IN' && session?.user) {
+          const sUser = session.user;
+          // 將 Supabase 的 user 轉成我們舊有的格式
+          const decoded = {
+            email: sUser.email,
+            name: sUser.user_metadata?.name || sUser.user_metadata?.full_name || 'LINE 用戶',
+            picture: sUser.user_metadata?.avatar_url || sUser.user_metadata?.picture || '',
+          };
+          const dbUser = await ensureUserExists(decoded);
+          const finalUser = { ...decoded, role: dbUser?.role || 'player' };
+          setUser(finalUser);
+          localStorage.setItem('user_profile', JSON.stringify(finalUser));
+        }
+      }
+    );
+
+    return () => subscription.unsubscribe();
   }, []);
 
   return (
