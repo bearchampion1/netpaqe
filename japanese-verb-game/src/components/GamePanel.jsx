@@ -27,61 +27,25 @@ export default function GamePanel() {
   }, []);
 
   const processData = (data) => {
-    const questions = [];
-    data.forEach(item => {
-      if (item.in_kanji) {
-        questions.push({
-          word: item.in_kanji,
-          hiragana: item.in_hiragana,
-          type: '自動詞',
-          meaning: item.in_meaning,
-          id: `${item.id}-in`
-        });
-      }
-      if (item.tr_kanji) {
-        questions.push({
-          word: item.tr_kanji,
-          hiragana: item.tr_hiragana,
-          type: '他動詞',
-          meaning: item.tr_meaning,
-          id: `${item.id}-tr`
-        });
-      }
-    });
+    // Supabase 的資料結構已經是單獨的 word, hiragana, meaning, type
+    // 不需要像以前 Google Sheets 一樣拆解 in_kanji 和 tr_kanji
+    const questions = data.map(item => ({
+      id: item.id,
+      word: item.word,
+      hiragana: item.hiragana,
+      type: item.type,
+      meaning: item.meaning
+    }));
     setVerbs(questions);
   };
 
   const loadData = async () => {
-    // 1. Cache First 策略：先讀取本機快取，如果有就立刻解除 Loading
-    const cached = localStorage.getItem('verbs_cache');
-    if (cached) {
-      try {
-        const parsed = JSON.parse(cached);
-        processData(parsed);
-        setLoading(false);
-      } catch(e) {
-        console.error("Cache parsing error", e);
-      }
-    } else {
-      setLoading(true);
-    }
-
-    // 2. 背景同步：偷偷向伺服器要最新資料
+    setLoading(true);
     try {
       const data = await fetchVerbs();
-      // 儲存最新資料到快取
-      localStorage.setItem('verbs_cache', JSON.stringify(data));
-      
-      // 如果本來沒有快取，就在這裡載入畫面
-      if (!cached) {
-        processData(data);
-        setLoading(false);
-      }
-      // 如果已經有快取，我們就把新資料默默存進 cache 就好，不用重刷畫面打斷玩家
+      processData(data);
+      setLoading(false);
     } catch (err) {
-      if (!cached) {
-        setError(err.message);
-        setLoading(false);
       }
     }
   };
