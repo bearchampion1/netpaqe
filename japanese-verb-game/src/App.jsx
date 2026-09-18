@@ -57,9 +57,11 @@ function AuthBlock({ className }) {
             }}
             className="bg-[#06C755] hover:bg-[#05b34c] text-white font-bold py-[6px] px-4 rounded text-sm whitespace-nowrap flex items-center justify-center h-[40px] w-[200px]"
           >
-            <svg viewBox="0 0 44 44" className="w-5 h-5 mr-2 fill-current">
-              <path d="M43.6 20.1c0-8.9-8.9-16.1-19.8-16.1S4 11.2 4 20.1c0 8 7.3 14.7 16.9 15.9 1.9.4 3.7 1.2 4.3 3.1.5 1.7.3 3.4.1 4.7-.2 1.5-1 4.7 4.1 2.5 5.2-2.2 14.2-8.3 14.2-26.2zm-28.7 5.7c-.5 0-.9-.4-.9-.9v-7.2c0-.5.4-.9.9-.9s.9.4.9.9v6.3h3.5c.5 0 .9.4.9.9s-.4.9-.9.9h-4.4zm9.3 0c-.5 0-.9-.4-.9-.9v-7.2c0-.5.4-.9.9-.9s.9.4.9.9v7.2c0 .5-.4.9-.9.9zm6.6 0h-4.2c-.5 0-.9-.4-.9-.9v-7.2c0-.5.4-.9.9-.9s.9.4.9.9v3.4l3.1-4c.2-.2.5-.3.7-.3.5 0 .9.4.9.9v7.2c0 .5-.4.9-.9.9s-.9-.4-.9-.9v-3.4l-3.1 4c-.2.2-.4.4-.7.4zm7.9-6.3h-3.5v1.8h3.5c.5 0 .9.4.9.9s-.4.9-.9.9h-3.5v1.8h3.5c.5 0 .9.4.9.9s-.4.9-.9.9h-4.4c-.5 0-.9-.4-.9-.9v-7.2c0-.5.4-.9.9-.9h4.4c.5 0 .9.4.9.9s-.4.9-.9.9z"/>
-            </svg>
+            <img 
+              src="https://upload.wikimedia.org/wikipedia/commons/4/41/LINE_logo.svg" 
+              alt="LINE Logo" 
+              className="w-6 h-6 mr-2 bg-white rounded flex-shrink-0 p-0.5"
+            />
             用 LINE 登入
           </button>
           
