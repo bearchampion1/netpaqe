@@ -99,17 +99,21 @@ export const deleteVerb = async (id) => {
   return true;
 };
 
-// --- 遊戲紀錄與錯題統計 ---
+// --- 遊戲紀錄與錯誤統計 ---
 export const saveGameRecord = async ({ userEmail, userName, score, accuracy, mistakes }) => {
   if (!userEmail) return;
 
   try {
-    // 1. 儲存總分紀錄
-    await supabase.from('game_records').insert([{
+    // 確保該使用者存在於資料庫中，避免 Foreign Key 錯誤
+    await ensureUserExists({ email: userEmail, name: userName });
+
+    // 1. 新增總分紀錄
+    const { error: insertError } = await supabase.from('game_records').insert([{
       user_email: userEmail,
       score: score,
       accuracy: accuracy
     }]);
+    if (insertError) console.error('Error inserting game record:', insertError);
 
     // 2. 儲存錯題 (upsert)
     if (mistakes && mistakes.length > 0) {
@@ -121,16 +125,23 @@ export const saveGameRecord = async ({ userEmail, userName, score, accuracy, mis
       
       const existingMap = new Map(existingMistakes?.map(m => [m.verb_id, m.error_count]) || []);
 
-      const upsertData = mistakes.map(verbId => {
+      // Aggregate current mistakes
+      const currentMistakesMap = new Map();
+      mistakes.forEach(verbId => {
+        currentMistakesMap.set(verbId, (currentMistakesMap.get(verbId) || 0) + 1);
+      });
+
+      const upsertData = Array.from(currentMistakesMap.entries()).map(([verbId, addedCount]) => {
         const count = existingMap.get(verbId) || 0;
         return {
           user_email: userEmail,
           verb_id: verbId,
-          error_count: count + 1
+          error_count: count + addedCount
         };
       });
 
-      await supabase.from('user_mistakes').upsert(upsertData, { onConflict: 'user_email,verb_id' });
+      const { error: upsertError } = await supabase.from('user_mistakes').upsert(upsertData, { onConflict: 'user_email,verb_id' });
+      if (upsertError) console.error('Error upserting mistakes:', upsertError);
     }
   } catch (error) {
     console.error('Error saving game record:', error);
