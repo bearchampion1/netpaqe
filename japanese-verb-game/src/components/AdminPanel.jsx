@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { addVerb } from '../api/googleSheets';
+import { useState, useEffect } from 'react';
+import { fetchVerbs, addVerb, updateVerb, deleteVerb } from '../api/database';
 
 export default function AdminPanel() {
   const [inData, setInData] = useState({ kanji: '', hiragana: '', meaning: '' });
@@ -11,7 +11,7 @@ export default function AdminPanel() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!inData.kanji && !trData.kanji) {
-      setMessage({ type: 'error', text: '請至少填寫一個自動詞或他動詞' });
+      setMessage({ type: 'error', text: '請至少填寫自動詞或他動詞。' });
       return;
     }
     if (inData.kanji && (!inData.meaning || !inData.hiragana)) {
@@ -27,15 +27,56 @@ export default function AdminPanel() {
     setMessage({ type: '', text: '' });
 
     try {
-      await addVerb({
-        in_kanji: inData.kanji,
-        in_hiragana: inData.hiragana,
-        in_meaning: inData.meaning,
-        tr_kanji: trData.kanji,
-        tr_hiragana: trData.hiragana,
-        tr_meaning: trData.meaning,
-      });
-      // 新增成功後清除本機快取，確保下次進入遊戲時會重新抓取最新資料
+      // 取得目前所有單字來做防呆檢查
+      const allVerbs = await fetchVerbs();
+      
+      const inExists = inData.kanji ? allVerbs.some(v => 
+        v.type === '自動詞' && v.word === inData.kanji && v.hiragana === inData.hiragana
+      ) : false;
+
+      const trExists = trData.kanji ? allVerbs.some(v => 
+        v.type === '他動詞' && v.word === trData.kanji && v.hiragana === trData.hiragana
+      ) : false;
+
+      // 嚴格的 AND 確認：
+      // 如果使用者同時輸入自動詞與他動詞，必須「兩者都已存在」才視為重複並阻擋。
+      // 如果只輸入其中一個，則只要該項目存在就阻擋。
+      if (inData.kanji && trData.kanji) {
+        if (inExists && trExists) {
+          setMessage({ type: 'error', text: '此自動詞與他動詞的組合已經存在於題庫中！' });
+          setLoading(false);
+          return;
+        }
+      } else if (inData.kanji && inExists) {
+        setMessage({ type: 'error', text: `自動詞「${inData.kanji}」已存在！` });
+        setLoading(false);
+        return;
+      } else if (trData.kanji && trExists) {
+        setMessage({ type: 'error', text: `他動詞「${trData.kanji}」已存在！` });
+        setLoading(false);
+        return;
+      }
+
+      // 檢查通過，開始寫入
+      if (inData.kanji && !inExists) {
+        await addVerb({
+          word: inData.kanji,
+          hiragana: inData.hiragana,
+          meaning: inData.meaning,
+          type: '自動詞'
+        });
+      }
+      
+      if (trData.kanji && !trExists) {
+        await addVerb({
+          word: trData.kanji,
+          hiragana: trData.hiragana,
+          meaning: trData.meaning,
+          type: '他動詞'
+        });
+      }
+
+      // 新增後清除本機快取，確保下次進入遊戲時會重新抓取
       localStorage.removeItem('verbs_cache');
       
       setMessage({ type: 'success', text: '新增成功！' });

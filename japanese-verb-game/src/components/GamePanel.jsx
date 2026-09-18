@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { fetchVerbs, saveGameRecord } from '../api/googleSheets';
+import { fetchVerbs, saveGameRecord } from '../api/database';
 import { UserContext } from '../App';
 
 export default function GamePanel() {

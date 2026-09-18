@@ -1,5 +1,5 @@
 import { useState, useEffect, createContext, useContext } from 'react';
-import { HashRouter as Router, Routes, Route, Link, useLocation, Navigate } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { GoogleOAuthProvider, GoogleLogin, googleLogout } from '@react-oauth/google';
 import { jwtDecode } from 'jwt-decode';
 
@@ -8,21 +8,13 @@ import GamePanel from './components/GamePanel';
 import AdminPanel from './components/AdminPanel';
 import Settings from './components/Settings';
 import FeedbackPanel from './components/FeedbackPanel';
+import Profile from './components/Profile';
+import { ensureUserExists } from './api/database';
 
 export const UserContext = createContext();
 
-// 取得環境變數中的管理員 Email 清單，並轉換為陣列
-const ADMIN_EMAILS = (import.meta.env.VITE_ADMIN_EMAILS || '')
-  .split(',')
-  .map(email => email.trim().toLowerCase())
-  .filter(email => email.length > 0);
-
 const isUserAdmin = (user) => {
-  if (!user || !user.email) return false;
-  // 如果沒有設定任何管理員，預設任何人登入都可以是管理員 (方便開發)，或是嚴格限制？
-  // 為了安全，如果有設定環境變數，就只允許清單內的人。如果完全沒設定，就允許所有登入者。
-  if (ADMIN_EMAILS.length === 0) return true; 
-  return ADMIN_EMAILS.includes(user.email.toLowerCase());
+  return user?.role === 'admin';
 };
 
 function AuthBlock({ className }) {
@@ -52,10 +44,13 @@ function AuthBlock({ className }) {
       ) : (
         <div className="scale-90 md:scale-75 origin-center md:origin-right">
           <GoogleLogin
-            onSuccess={credentialResponse => {
+            onSuccess={async (credentialResponse) => {
               const decoded = jwtDecode(credentialResponse.credential);
-              setUser(decoded);
-              localStorage.setItem('user_profile', JSON.stringify(decoded));
+              // Save to Supabase and get role
+              const dbUser = await ensureUserExists(decoded);
+              const finalUser = { ...decoded, role: dbUser?.role || 'player' };
+              setUser(finalUser);
+              localStorage.setItem('user_profile', JSON.stringify(finalUser));
             }}
             onError={() => {
               console.log('Login Failed');
@@ -95,6 +90,7 @@ function Nav() {
       <div className="flex flex-wrap justify-center gap-1 sm:gap-2">
         {navLink('/', '入口首頁')}
         {navLink('/game', '開始遊戲')}
+        {navLink('/profile', '遊戲紀錄及過去錯題')}
         {navLink('/feedback', '意見回饋')}
         {/* 只有具備管理員權限才顯示後台與設定連結 */}
         {isAdmin && navLink('/admin', '後台新增')}
@@ -164,11 +160,12 @@ export default function App() {
         <Router>
           <div className="min-h-screen bg-white flex flex-col">
             <Nav />
-            <main className="flex-1 flex flex-col">
+            <main className="flex-1 flex flex-col relative overflow-x-hidden">
               <Routes>
                 <Route path="/" element={<LandingPage />} />
                 <Route path="/game" element={<GamePanel />} />
                 <Route path="/feedback" element={<FeedbackPanel />} />
+                <Route path="/profile" element={<Profile />} />
                 <Route path="/admin" element={
                   <ProtectedRoute><AdminPanel /></ProtectedRoute>
                 } />
@@ -178,7 +175,7 @@ export default function App() {
               </Routes>
             </main>
             <MobileAuth />
-            <footer className="bg-black text-white text-center py-4 text-sm font-bold">
+            <footer className="bg-black text-white text-center py-4 text-sm font-bold shrink-0">
               {currentYear} &copy; 熊哥 & Antigravity
             </footer>
           </div>

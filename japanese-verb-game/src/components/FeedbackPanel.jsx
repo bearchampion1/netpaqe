@@ -1,6 +1,6 @@
 import { useState, useContext } from 'react';
 import { UserContext } from '../App';
-import { submitFeedback } from '../api/googleSheets';
+import { submitFeedback } from '../api/database';
 
 export default function FeedbackPanel() {
   const { user } = useContext(UserContext);
