@@ -46,7 +46,8 @@ export default function GamePanel() {
       processData(data);
       setLoading(false);
     } catch (err) {
-      }
+      setError(err.message);
+      setLoading(false);
     }
   };
 
