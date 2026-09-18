@@ -17,6 +17,7 @@ export default function GamePanel() {
   const [gameQueue, setGameQueue] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [score, setScore] = useState(0);
+  const [mistakes, setMistakes] = useState([]);
   const [showResult, setShowResult] = useState(false); // is the round ended?
   
   const [answered, setAnswered] = useState(false);
@@ -55,6 +56,8 @@ export default function GamePanel() {
     if (verbs.length === 0) return;
     
     setMode(selectedMode);
+    setScore(0);
+    setMistakes([]);
     
     // Shuffle verbs
     let shuffled = [...verbs].sort(() => Math.random() - 0.5);
@@ -65,11 +68,10 @@ export default function GamePanel() {
     
     setGameQueue(shuffled);
     setCurrentIndex(0);
-    setScore(0);
-    setGameStarted(true);
-    setShowResult(false);
     setAnswered(false);
     setSelectedAnswer(null);
+    setGameStarted(true);
+    setShowResult(false);
   };
 
   const handleAnswer = (answerType) => {
@@ -81,6 +83,8 @@ export default function GamePanel() {
     
     if (answerType === currentQ.type) {
       setScore(prev => prev + 1);
+    } else {
+      setMistakes(prev => [...prev, currentQ.id]);
     }
   };
 
@@ -102,12 +106,11 @@ export default function GamePanel() {
         setShowResult(true);
         // 背景上傳成績
         saveGameRecord({
-          user_name: user ? user.name : '訪客',
-          user_email: user ? user.email : '',
-          mode: 'fixed',
-          total: gameQueue.length,
+          userName: user ? user.name : '訪客',
+          userEmail: user ? user.email : '',
           score: score,
-          accuracy: Math.round((score / gameQueue.length) * 100) + '%'
+          accuracy: Math.round((score / gameQueue.length) * 100),
+          mistakes: mistakes
         }).catch(err => console.error('Failed to save record:', err));
       }
     }
