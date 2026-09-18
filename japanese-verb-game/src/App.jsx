@@ -49,6 +49,9 @@ function AuthBlock({ className }) {
             onClick={async () => {
               const { error } = await supabase.auth.signInWithOAuth({
                 provider: 'custom:line',
+                options: {
+                  scopes: 'openid profile email'
+                }
               });
               if (error) {
                 console.error('LINE login error:', error);
