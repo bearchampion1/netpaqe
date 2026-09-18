@@ -10,8 +10,6 @@ import Settings from './components/Settings';
 import FeedbackPanel from './components/FeedbackPanel';
 import Profile from './components/Profile';
 import { ensureUserExists } from './api/database';
-import { supabase } from './api/supabaseClient';
-import liff from '@line/liff';
 
 export const UserContext = createContext();
 
@@ -33,16 +31,8 @@ function AuthBlock({ className }) {
             {isAdmin && <span className="text-[10px] text-red-500 font-bold leading-none">管理員</span>}
           </div>
           <button 
-            onClick={async () => {
+            onClick={() => {
               googleLogout();
-              await supabase.auth.signOut();
-              try {
-                if (liff.isLoggedIn()) {
-                  liff.logout();
-                }
-              } catch (e) {
-                console.error(e);
-              }
               setUser(null);
               localStorage.removeItem('user_profile');
             }}
@@ -53,28 +43,6 @@ function AuthBlock({ className }) {
         </div>
       ) : (
         <div className="flex flex-col md:flex-row items-center gap-2 scale-90 md:scale-100 origin-center md:origin-right">
-          <button
-            onClick={() => {
-              try {
-                if (!liff.isLoggedIn()) {
-                  // LIFF login 會自動跳轉，登入後跳回當前網頁
-                  liff.login({ redirectUri: window.location.href });
-                }
-              } catch (error) {
-                console.error('LINE LIFF login error:', error);
-                alert('LINE 登入設定失敗，請確認已載入 LIFF');
-              }
-            }}
-            className="bg-[#06C755] hover:bg-[#05b34c] text-white font-bold py-[6px] px-4 rounded text-sm whitespace-nowrap flex items-center justify-center h-[40px] w-[200px]"
-          >
-            <img 
-              src="https://upload.wikimedia.org/wikipedia/commons/4/41/LINE_logo.svg" 
-              alt="LINE Logo" 
-              className="w-6 h-6 mr-2 bg-white rounded flex-shrink-0 p-0.5"
-            />
-            用 LINE 登入
-          </button>
-          
           <div className="h-[40px]">
             <GoogleLogin
               onSuccess={async (credentialResponse) => {
@@ -186,55 +154,6 @@ export default function App() {
     if (savedUser) {
       setUser(JSON.parse(savedUser));
     }
-
-    // 初始化 LIFF
-    const initLiff = async () => {
-      try {
-        await liff.init({ liffId: '2011657832-chMmmMal' });
-        if (liff.isLoggedIn()) {
-          const profile = await liff.getProfile();
-          const email = liff.getDecodedIDToken()?.email;
-          
-          if (!email) {
-            console.error('LIFF 沒有回傳 Email，請確認是否有在 LINE 後台開啟 Email 權限');
-          }
-
-          const decoded = {
-            email: email || `${profile.userId}@line.me`, // Fallback
-            name: profile.displayName || 'LINE 用戶',
-            picture: profile.pictureUrl || '',
-          };
-          const dbUser = await ensureUserExists(decoded);
-          const finalUser = { ...decoded, role: dbUser?.role || 'player' };
-          setUser(finalUser);
-          localStorage.setItem('user_profile', JSON.stringify(finalUser));
-        }
-      } catch (err) {
-        console.error('LIFF init failed', err);
-      }
-    };
-    initLiff();
-
-    // 監聽 Supabase 的登入狀態 (給未來其他提供者備用，不影響 LINE)
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        if (event === 'SIGNED_IN' && session?.user) {
-          const sUser = session.user;
-          // 將 Supabase 的 user 轉成我們舊有的格式
-          const decoded = {
-            email: sUser.email,
-            name: sUser.user_metadata?.name || sUser.user_metadata?.full_name || 'LINE 用戶',
-            picture: sUser.user_metadata?.avatar_url || sUser.user_metadata?.picture || '',
-          };
-          const dbUser = await ensureUserExists(decoded);
-          const finalUser = { ...decoded, role: dbUser?.role || 'player' };
-          setUser(finalUser);
-          localStorage.setItem('user_profile', JSON.stringify(finalUser));
-        }
-      }
-    );
-
-    return () => subscription.unsubscribe();
   }, []);
 
   return (
